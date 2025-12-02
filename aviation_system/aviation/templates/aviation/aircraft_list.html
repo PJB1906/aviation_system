@@ -1,0 +1,63 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Aircraft - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">Aircraft</h1>
+            <p class="page-subtitle">Manage aircraft fleet</p>
+        </div>
+        <a href="{% url 'add_aircraft' %}" class="btn">
+            <span>➕</span> Add New Aircraft
+        </a>
+    </div>
+</div>
+
+<div class="content-box">
+    <div class="content-box-header">
+        <h2 class="content-box-title">All Aircraft ({{ aircraft|length }})</h2>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Aircraft ID</th>
+                    <th>Type</th>
+                    <th>Airline</th>
+                    <th>Manufacture Year</th>
+                    <th>Last Maintenance</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ac in aircraft %}
+                <tr>
+                    <td><strong>{{ ac.aircraftid }}</strong></td>
+                    <td>{{ ac.aircrafttypecode.typename }}</td>
+                    <td>{{ ac.airlineid.airlinename }}</td>
+                    <td>{{ ac.manufactureyear }}</td>
+                    <td>{{ ac.lastmaintenancedate|date:"Y-m-d" }}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'edit_aircraft' ac.aircraftid %}" class="btn btn-sm">Edit</a>
+                            <form method="post" action="{% url 'delete_aircraft' ac.aircraftid %}" style="display: inline;" onsubmit="return confirmDelete('Aircraft #{{ ac.aircraftid }}');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                        No aircraft found. <a href="{% url 'add_aircraft' %}" style="color: #60a5fa;">Add your first aircraft</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

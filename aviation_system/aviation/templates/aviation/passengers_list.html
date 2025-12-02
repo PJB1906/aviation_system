@@ -1,40 +1,66 @@
-<!-- ============================================================================ -->
-<!-- FILE 11: aviation/templates/aviation/passengers_list.html -->
-<!-- ============================================================================ -->
 {% extends 'aviation/base.html' %}
 
-{% block title %}Passengers - Aviation System{% endblock %}
+{% block title %}Passengers - AviationDB{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <h1>All Passengers</h1>
-    <a href="{% url 'add_passenger' %}" class="btn">➕ Add New Passenger</a>
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">Passengers</h1>
+            <p class="page-subtitle">Manage passenger information</p>
+        </div>
+        <a href="{% url 'add_passenger' %}" class="btn">
+            <span>➕</span> Add New Passenger
+        </a>
+    </div>
 </div>
 
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Passport</th>
-            <th>Nationality</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for passenger in passengers %}
-        <tr>
-            <td>{{ passenger.passengerid }}</td>
-            <td>{{ passenger.firstname }} {{ passenger.lastname }}</td>
-            <td>{{ passenger.email }}</td>
-            <td>{{ passenger.phone }}</td>
-            <td>{{ passenger.passportnumber }}</td>
-            <td>{{ passenger.nationality }}</td>
-            <td><a href="{% url 'passenger_detail' passenger.passengerid %}" style="color: #667eea; text-decoration: none;">View Details</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="content-box">
+    <div class="content-box-header">
+        <h2 class="content-box-title">All Passengers ({{ passengers|length }})</h2>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Passport</th>
+                    <th>Nationality</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for passenger in passengers %}
+                <tr>
+                    <td><strong>{{ passenger.passengerid }}</strong></td>
+                    <td>{{ passenger.firstname }} {{ passenger.lastname }}</td>
+                    <td>{{ passenger.email }}</td>
+                    <td>{{ passenger.phone }}</td>
+                    <td>{{ passenger.passportnumber }}</td>
+                    <td>{{ passenger.nationality }}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'passenger_detail' passenger.passengerid %}" class="btn btn-sm btn-secondary">View</a>
+                            <a href="{% url 'edit_passenger' passenger.passengerid %}" class="btn btn-sm">Edit</a>
+                            <form method="post" action="{% url 'delete_passenger' passenger.passengerid %}" style="display: inline;" onsubmit="return confirmDelete('{{ passenger.firstname }} {{ passenger.lastname }}');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                        No passengers found. <a href="{% url 'add_passenger' %}" style="color: #60a5fa;">Add your first passenger</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

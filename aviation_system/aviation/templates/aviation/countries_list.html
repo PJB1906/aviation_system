@@ -1,0 +1,57 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Countries - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">Countries</h1>
+            <p class="page-subtitle">Manage country data</p>
+        </div>
+        <a href="{% url 'add_country' %}" class="btn">
+            <span>➕</span> Add New Country
+        </a>
+    </div>
+</div>
+
+<div class="content-box">
+    <div class="content-box-header">
+        <h2 class="content-box-title">All Countries ({{ countries|length }})</h2>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Country Code</th>
+                    <th>Country Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for country in countries %}
+                <tr>
+                    <td><strong>{{ country.countrycode }}</strong></td>
+                    <td>{{ country.countryname }}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'edit_country' country.countrycode %}" class="btn btn-sm">Edit</a>
+                            <form method="post" action="{% url 'delete_country' country.countrycode %}" style="display: inline;" onsubmit="return confirmDelete('{{ country.countryname }}');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                        No countries found. <a href="{% url 'add_country' %}" style="color: #60a5fa;">Add your first country</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

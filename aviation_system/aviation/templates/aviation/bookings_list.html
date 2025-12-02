@@ -1,40 +1,74 @@
-<!-- ============================================================================ -->
-<!-- FILE 13: aviation/templates/aviation/bookings_list.html -->
-<!-- ============================================================================ -->
 {% extends 'aviation/base.html' %}
 
-{% block title %}Bookings - Aviation System{% endblock %}
+{% block title %}Bookings - AviationDB{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <h1>All Bookings</h1>
-    <a href="{% url 'add_booking' %}" class="btn">➕ Create New Booking</a>
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">Bookings</h1>
+            <p class="page-subtitle">Manage flight bookings</p>
+        </div>
+        <a href="{% url 'add_booking' %}" class="btn">
+            <span>➕</span> Add New Booking
+        </a>
+    </div>
 </div>
 
-<table>
-    <thead>
-        <tr>
-            <th>Booking ID</th>
-            <th>Passenger</th>
-            <th>Booking Date</th>
-            <th>Total Amount</th>
-            <th>Status</th>
-            <th>Channel</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for booking in bookings %}
-        <tr>
-            <td>{{ booking.bookingid }}</td>
-            <td>{{ booking.passengerid.firstname }} {{ booking.passengerid.lastname }}</td>
-            <td>{{ booking.bookingdate|date:"Y-m-d H:i" }}</td>
-            <td>{{ booking.currencycode.currencysymbol }} {{ booking.totalamount }}</td>
-            <td><span style="padding: 0.25rem 0.75rem; background: {% if booking.bookingstatus == 'Confirmed' %}#d4edda{% elif booking.bookingstatus == 'Pending' %}#fff3cd{% else %}#f8d7da{% endif %}; border-radius: 15px; font-size: 0.85rem;">{{ booking.bookingstatus }}</span></td>
-            <td>{{ booking.bookingchannel }}</td>
-            <td><a href="{% url 'booking_detail' booking.bookingid %}" style="color: #667eea; text-decoration: none;">View Details</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="content-box">
+    <div class="content-box-header">
+        <h2 class="content-box-title">All Bookings ({{ bookings|length }})</h2>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Passenger</th>
+                    <th>Booking Date</th>
+                    <th>Amount</th>
+                    <th>Channel</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td><strong>{{ booking.bookingid }}</strong></td>
+                    <td>{{ booking.passengerid.firstname }} {{ booking.passengerid.lastname }}</td>
+                    <td>{{ booking.bookingdate|date:"Y-m-d H:i" }}</td>
+                    <td>{{ booking.currencycode.currencysymbol }} {{ booking.totalamount }}</td>
+                    <td>{{ booking.bookingchannel }}</td>
+                    <td>
+                        {% if booking.bookingstatus == 'Confirmed' %}
+                            <span class="badge badge-success">Confirmed</span>
+                        {% elif booking.bookingstatus == 'Pending' %}
+                            <span class="badge badge-warning">Pending</span>
+                        {% else %}
+                            <span class="badge badge-danger">Cancelled</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'booking_detail' booking.bookingid %}" class="btn btn-sm btn-secondary">View</a>
+                            <a href="{% url 'edit_booking' booking.bookingid %}" class="btn btn-sm">Edit</a>
+                            <form method="post" action="{% url 'delete_booking' booking.bookingid %}" style="display: inline;" onsubmit="return confirmDelete('Booking #{{ booking.bookingid }}');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                        No bookings found. <a href="{% url 'add_booking' %}" style="color: #60a5fa;">Add your first booking</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

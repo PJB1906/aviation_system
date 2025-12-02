@@ -1,0 +1,73 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Crew Members - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">Crew Members</h1>
+            <p class="page-subtitle">Manage crew personnel</p>
+        </div>
+        <a href="{% url 'add_crew' %}" class="btn">
+            <span>➕</span> Add New Crew Member
+        </a>
+    </div>
+</div>
+
+<div class="content-box">
+    <div class="content-box-header">
+        <h2 class="content-box-title">All Crew Members ({{ crew|length }})</h2>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Crew ID</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Airline</th>
+                    <th>Base Airport</th>
+                    <th>Hire Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in crew %}
+                <tr>
+                    <td><strong>{{ member.CrewID }}</strong></td>
+                    <td>{{ member.FirstName }} {{ member.LastName }}</td>
+                    <td>
+                        {% if member.CrewType == 'Pilot' %}
+                            <span class="badge badge-info">👨‍✈️ {{ member.CrewType }}</span>
+                        {% elif member.CrewType == 'Cabin Crew' %}
+                            <span class="badge badge-success">✈️ {{ member.CrewType }}</span>
+                        {% else %}
+                            <span class="badge badge-warning">🔧 {{ member.CrewType }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ member.AirlineName }}</td>
+                    <td>{{ member.AirportName|truncatewords:3 }}</td>
+                    <td>{{ member.HireDate }}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'edit_crew' member.CrewID %}" class="btn btn-sm">Edit</a>
+                            <form method="post" action="{% url 'delete_crew' member.CrewID %}" style="display: inline;" onsubmit="return confirmDelete('{{ member.FirstName }} {{ member.LastName }}');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                        No crew members found. <a href="{% url 'add_crew' %}" style="color: #60a5fa;">Add your first crew member</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

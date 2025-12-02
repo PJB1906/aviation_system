@@ -1,12 +1,10 @@
-<!-- ============================================================================ -->
-<!-- FILE 7: aviation/templates/aviation/base.html -->
-<!-- ============================================================================ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Aviation Management System{% endblock %}</title>
+    <title>{% block title %}AviationDB{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,128 +13,437 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f1419;
+            color: #e4e6eb;
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 240px;
+            background: #1a1f2e;
+            border-right: 1px solid #2d3748;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+        
+        .sidebar-brand {
+            padding: 1.5rem 1.25rem;
+            border-bottom: 1px solid #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .sidebar-brand-icon {
+            font-size: 1.5rem;
+        }
+        
+        .sidebar-brand-text {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #60a5fa;
+        }
+        
+        .sidebar-status {
+            font-size: 0.75rem;
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.25rem;
+        }
+        
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .sidebar-section {
+            padding: 1rem 0;
+            border-bottom: 1px solid #2d3748;
+        }
+        
+        .sidebar-section-title {
+            padding: 0.5rem 1.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            color: #d1d5db;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+        
+        .sidebar-menu a:hover {
+            background: #2d3748;
+            color: #60a5fa;
+        }
+        
+        .sidebar-menu a.active {
+            background: #1e40af;
+            color: #fff;
+            border-left: 3px solid #60a5fa;
+        }
+        
+        .menu-icon {
+            font-size: 1.125rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 240px;
+            flex: 1;
             min-height: 100vh;
         }
         
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
+        /* Top Header */
+        .top-header {
+            background: #1a1f2e;
+            border-bottom: 1px solid #2d3748;
             padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.625rem 1rem;
+            background: #0f1419;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            color: #e4e6eb;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: #2d3748;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .user-profile:hover {
+            background: #374151;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        /* Content Container */
+        .container {
+            padding: 2rem;
+            max-width: 1400px;
+        }
+        
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #2d3748;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+        
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+        
+        .stat-card.green {
+            background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+        }
+        
+        .stat-card.orange {
+            background: linear-gradient(135deg, #c2410c 0%, #ea580c 100%);
+        }
+        
+        .stat-card.purple {
+            background: linear-gradient(135deg, #6b21a8 0%, #7c3aed 100%);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stat-title {
+            font-size: 0.875rem;
+            color: #d1d5db;
+            font-weight: 500;
+        }
+        
+        .stat-icon {
+            font-size: 2rem;
+            opacity: 0.8;
+        }
+        
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stat-change {
+            font-size: 0.75rem;
+            color: #10b981;
+            margin-top: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Content Box */
+        .content-box {
+            background: #1a1f2e;
+            border-radius: 12px;
+            border: 1px solid #2d3748;
+            overflow: hidden;
+        }
+        
+        .content-box-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #2d3748;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
-            text-decoration: none;
+        .content-box-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #fff;
         }
         
-        .navbar-menu {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
+        .content-box-body {
+            padding: 1.5rem;
         }
         
-        .navbar-menu a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .navbar-menu a:hover {
-            color: #667eea;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        
-        .content-box {
-            background: white;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-        
-        .messages {
-            margin-bottom: 1rem;
-        }
-        
-        .alert {
-            padding: 1rem;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-        }
-        
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        h1, h2, h3 {
-            color: #333;
-            margin-bottom: 1rem;
-        }
-        
+        /* Buttons */
         .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background: #667eea;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            background: #3b82f6;
             color: white;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 8px;
             border: none;
             cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-family: inherit;
         }
         
         .btn:hover {
-            background: #5568d3;
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
         }
         
         .btn-secondary {
-            background: #6c757d;
+            background: #6b7280;
         }
         
         .btn-secondary:hover {
-            background: #5a6268;
+            background: #4b5563;
+        }
+        
+        .btn-success {
+            background: #10b981;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8125rem;
+        }
+        
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #dee2e6;
         }
         
         th {
-            background: #f8f9fa;
+            background: #0f1419;
+            padding: 1rem;
+            text-align: left;
             font-weight: 600;
+            font-size: 0.8125rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid #2d3748;
+        }
+        
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #2d3748;
+            color: #d1d5db;
+            font-size: 0.875rem;
         }
         
         tr:hover {
-            background: #f8f9fa;
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        /* Status Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+        
+        .badge-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+        
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .badge-info {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+        
+        /* Forms */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
         }
         
         .form-group {
@@ -147,52 +454,234 @@
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
-            color: #333;
+            color: #d1d5db;
+            font-size: 0.875rem;
         }
         
         input, select, textarea {
             width: 100%;
             padding: 0.75rem;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            font-size: 1rem;
+            background: #0f1419;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            color: #e4e6eb;
+            font-size: 0.875rem;
+            font-family: inherit;
+            transition: all 0.2s;
         }
         
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+        }
+        
+        /* Messages */
+        .messages {
+            margin-bottom: 1.5rem;
+        }
+        
+        .alert {
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+        }
+        
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #1a1f2e;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid #2d3748;
+        }
+        
+        .modal-header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .modal-footer {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <a href="{% url 'home' %}" class="navbar-brand">✈️ Aviation System</a>
-        <ul class="navbar-menu">
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'flights_list' %}">Flights</a></li>
-            <li><a href="{% url 'passengers_list' %}">Passengers</a></li>
-            <li><a href="{% url 'bookings_list' %}">Bookings</a></li>
-            <li><a href="{% url 'airlines_list' %}">Airlines</a></li>
-            <li><a href="{% url 'airports_list' %}">Airports</a></li>
-        </ul>
-    </nav>
-
-    <div class="container">
-        {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                {{ message }}
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span class="sidebar-brand-icon">✈️</span>
+                    <span class="sidebar-brand-text">AviationDB</span>
+                </div>
+                <div class="sidebar-status">
+                    <span class="status-dot"></span>
+                    <span>Connected (MySQL)</span>
+                </div>
             </div>
-            {% endfor %}
         </div>
-        {% endif %}
-
-        <div class="content-box">
+        
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Main</div>
+            <ul class="sidebar-menu">
+                <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                    <span class="menu-icon">📊</span> Dashboard
+                </a></li>
+            </ul>
+        </div>
+        
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Tables (42)</div>
+            <ul class="sidebar-menu">
+                <li><a href="{% url 'flights_list' %}" class="{% if 'flight' in request.path %}active{% endif %}">
+                    <span class="menu-icon">✈️</span> Flights
+                </a></li>
+                <li><a href="{% url 'passengers_list' %}" class="{% if 'passenger' in request.path %}active{% endif %}">
+                    <span class="menu-icon">👤</span> Passengers
+                </a></li>
+                <li><a href="{% url 'bookings_list' %}" class="{% if 'booking' in request.path %}active{% endif %}">
+                    <span class="menu-icon">📝</span> Bookings
+                </a></li>
+                <li><a href="{% url 'airlines_list' %}" class="{% if 'airline' in request.path %}active{% endif %}">
+                    <span class="menu-icon">🏢</span> Airlines
+                </a></li>
+                <li><a href="{% url 'airports_list' %}" class="{% if 'airport' in request.path %}active{% endif %}">
+                    <span class="menu-icon">🛫</span> Airports
+                </a></li>
+                <li><a href="{% url 'aircraft_list' %}" class="{% if 'aircraft' in request.path %}active{% endif %}">
+                    <span class="menu-icon">🛩️</span> Aircraft
+                </a></li>
+                <li><a href="{% url 'routes_list' %}" class="{% if 'route' in request.path %}active{% endif %}">
+                    <span class="menu-icon">🗺️</span> Routes
+                </a></li>
+                <li><a href="{% url 'crew_list' %}" class="{% if 'crew' in request.path %}active{% endif %}">
+                    <span class="menu-icon">👨‍✈️</span> Crew Members
+                </a></li>
+                <li><a href="{% url 'maintenance_list' %}" class="{% if 'maintenance' in request.path %}active{% endif %}">
+                    <span class="menu-icon">🔧</span> Maintenance
+                </a></li>
+                <li><a href="{% url 'countries_list' %}" class="{% if 'countr' in request.path %}active{% endif %}">
+                    <span class="menu-icon">🌍</span> Countries
+                </a></li>
+            </ul>
+        </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search data..." id="searchInput">
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">U</div>
+                <span style="font-size: 0.875rem; font-weight: 500;">User</span>
+            </div>
+        </header>
+        
+        <!-- Content Container -->
+        <div class="container">
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
             {% block content %}
             {% endblock %}
         </div>
-    </div>
+    </main>
+    
+    <script>
+        // Simple search functionality
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = this.value;
+                if (query) {
+                    window.location.href = '/search/?q=' + encodeURIComponent(query);
+                }
+            }
+        });
+        
+        // Delete confirmation
+        function confirmDelete(itemName) {
+            return confirm(`Are you sure you want to delete ${itemName}? This action cannot be undone.`);
+        }
+    </script>
 </body>
 </html>

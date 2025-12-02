@@ -1,40 +1,80 @@
-<!-- ============================================================================ -->
-<!-- FILE 9: aviation/templates/aviation/flights_list.html -->
-<!-- ============================================================================ -->
 {% extends 'aviation/base.html' %}
 
-{% block title %}Flights - Aviation System{% endblock %}
+{% block title %}Flights - AviationDB{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <h1>All Flights</h1>
-    <a href="{% url 'add_flight' %}" class="btn">➕ Add New Flight</a>
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">Flights</h1>
+            <p class="page-subtitle">Manage all flight operations</p>
+        </div>
+        <a href="{% url 'add_flight' %}" class="btn">
+            <span>➕</span> Add New Flight
+        </a>
+    </div>
 </div>
 
-<table>
-    <thead>
-        <tr>
-            <th>Flight ID</th>
-            <th>Flight Number</th>
-            <th>Airline</th>
-            <th>Departure</th>
-            <th>Arrival</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for flight in flights %}
-        <tr>
-            <td>{{ flight.flightid }}</td>
-            <td>{{ flight.flightnumber }}</td>
-            <td>{{ flight.airlineid.airlinename }}</td>
-            <td>{{ flight.departureairportcode.airportname }}</td>
-            <td>{{ flight.arrivalairportcode.airportname }}</td>
-            <td><span style="padding: 0.25rem 0.75rem; background: {% if flight.flightstatus == 'Completed' %}#d4edda{% elif flight.flightstatus == 'Delayed' %}#fff3cd{% elif flight.flightstatus == 'Cancelled' %}#f8d7da{% else %}#cfe2ff{% endif %}; border-radius: 15px; font-size: 0.85rem;">{{ flight.flightstatus }}</span></td>
-            <td><a href="{% url 'flight_detail' flight.flightid %}" style="color: #667eea; text-decoration: none;">View Details</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="content-box">
+    <div class="content-box-header">
+        <h2 class="content-box-title">All Flights ({{ flights|length }})</h2>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Flight #</th>
+                    <th>Airline</th>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>Departure</th>
+                    <th>Arrival</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight in flights %}
+                <tr>
+                    <td><strong>{{ flight.flightnumber }}</strong></td>
+                    <td>{{ flight.airlineid.airlinename }}</td>
+                    <td>{{ flight.departureairportcode.airportname|truncatewords:3 }}</td>
+                    <td>{{ flight.arrivalairportcode.airportname|truncatewords:3 }}</td>
+                    <td>{{ flight.scheduleddeparture|date:"Y-m-d H:i" }}</td>
+                    <td>{{ flight.scheduledarrival|date:"Y-m-d H:i" }}</td>
+                    <td>
+                        {% if flight.flightstatus == 'Completed' %}
+                            <span class="badge badge-success">Completed</span>
+                        {% elif flight.flightstatus == 'In-Flight' %}
+                            <span class="badge badge-info">In Air</span>
+                        {% elif flight.flightstatus == 'Delayed' %}
+                            <span class="badge badge-warning">Delayed</span>
+                        {% elif flight.flightstatus == 'Cancelled' %}
+                            <span class="badge badge-danger">Cancelled</span>
+                        {% else %}
+                            <span class="badge badge-info">{{ flight.flightstatus }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'flight_detail' flight.flightid %}" class="btn btn-sm btn-secondary">View</a>
+                            <a href="{% url 'edit_flight' flight.flightid %}" class="btn btn-sm">Edit</a>
+                            <form method="post" action="{% url 'delete_flight' flight.flightid %}" style="display: inline;" onsubmit="return confirmDelete('{{ flight.flightnumber }}');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                        No flights found. <a href="{% url 'add_flight' %}" style="color: #60a5fa;">Add your first flight</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

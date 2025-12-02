@@ -1,0 +1,71 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Routes - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">Routes</h1>
+            <p class="page-subtitle">Manage flight routes</p>
+        </div>
+        <a href="{% url 'add_route' %}" class="btn">
+            <span>➕</span> Add New Route
+        </a>
+    </div>
+</div>
+
+<div class="content-box">
+    <div class="content-box-header">
+        <h2 class="content-box-title">All Routes ({{ routes|length }})</h2>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Route ID</th>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>Distance (KM)</th>
+                    <th>Duration (mins)</th>
+                    <th>Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for route in routes %}
+                <tr>
+                    <td><strong>{{ route.RouteID }}</strong></td>
+                    <td>{{ route.OriginName|truncatewords:3 }}</td>
+                    <td>{{ route.DestName|truncatewords:3 }}</td>
+                    <td>{{ route.DistanceKM }}</td>
+                    <td>{{ route.EstimatedDurationMins }}</td>
+                    <td>
+                        {% if route.RouteType == 1 %}
+                            <span class="badge badge-info">International</span>
+                        {% else %}
+                            <span class="badge badge-success">Domestic</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'edit_route' route.RouteID %}" class="btn btn-sm">Edit</a>
+                            <form method="post" action="{% url 'delete_route' route.RouteID %}" style="display: inline;" onsubmit="return confirmDelete('Route #{{ route.RouteID }}');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                        No routes found. <a href="{% url 'add_route' %}" style="color: #60a5fa;">Add your first route</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

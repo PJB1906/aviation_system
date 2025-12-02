@@ -1,0 +1,146 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Edit Flight - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Edit Flight</h1>
+    <p class="page-subtitle">Update flight information</p>
+</div>
+
+<div class="content-box">
+    <div class="content-box-body">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="id_flightid">Flight ID</label>
+                    <input type="number" name="flightid" id="id_flightid" value="{{ flight.flightid }}" readonly style="background: #2d3748; cursor: not-allowed;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_flightnumber">Flight Number</label>
+                    <input type="text" name="flightnumber" id="id_flightnumber" value="{{ flight.flightnumber }}" required>
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="id_scheduleddeparture">Scheduled Departure</label>
+                    <input type="datetime-local" name="scheduleddeparture" id="id_scheduleddeparture" 
+                           value="{{ flight.scheduleddeparture|date:'Y-m-d\TH:i' }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_scheduledarrival">Scheduled Arrival</label>
+                    <input type="datetime-local" name="scheduledarrival" id="id_scheduledarrival" 
+                           value="{{ flight.scheduledarrival|date:'Y-m-d\TH:i' }}" required>
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="id_actualdeparture">Actual Departure (Optional)</label>
+                    <input type="datetime-local" name="actualdeparture" id="id_actualdeparture" 
+                           value="{% if flight.actualdeparture %}{{ flight.actualdeparture|date:'Y-m-d\TH:i' }}{% endif %}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_actualarrival">Actual Arrival (Optional)</label>
+                    <input type="datetime-local" name="actualarrival" id="id_actualarrival" 
+                           value="{% if flight.actualarrival %}{{ flight.actualarrival|date:'Y-m-d\TH:i' }}{% endif %}">
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="id_flightstatus">Flight Status</label>
+                    <select name="flightstatus" id="id_flightstatus" required>
+                        <option value="Scheduled" {% if flight.flightstatus == 'Scheduled' %}selected{% endif %}>Scheduled</option>
+                        <option value="In-Flight" {% if flight.flightstatus == 'In-Flight' %}selected{% endif %}>In-Flight</option>
+                        <option value="Completed" {% if flight.flightstatus == 'Completed' %}selected{% endif %}>Completed</option>
+                        <option value="Delayed" {% if flight.flightstatus == 'Delayed' %}selected{% endif %}>Delayed</option>
+                        <option value="Cancelled" {% if flight.flightstatus == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_airlineid">Airline</label>
+                    <select name="airlineid" id="id_airlineid" required>
+                        {% for airline in airlines %}
+                        <option value="{{ airline.airlineid }}" {% if flight.airlineid.airlineid == airline.airlineid %}selected{% endif %}>
+                            {{ airline.airlinename }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="id_aircraftid">Aircraft</label>
+                    <select name="aircraftid" id="id_aircraftid" required>
+                        {% for ac in aircraft %}
+                        <option value="{{ ac.aircraftid }}" {% if flight.aircraftid.aircraftid == ac.aircraftid %}selected{% endif %}>
+                            Aircraft {{ ac.aircraftid }} - {{ ac.aircrafttypecode.typename }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_departureairportcode">Departure Airport</label>
+                    <select name="departureairportcode" id="id_departureairportcode" required>
+                        {% for airport in airports %}
+                        <option value="{{ airport.airportcode }}" {% if flight.departureairportcode.airportcode == airport.airportcode %}selected{% endif %}>
+                            {{ airport.airportname }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="id_arrivalairportcode">Arrival Airport</label>
+                    <select name="arrivalairportcode" id="id_arrivalairportcode" required>
+                        {% for airport in airports %}
+                        <option value="{{ airport.airportcode }}" {% if flight.arrivalairportcode.airportcode == airport.airportcode %}selected{% endif %}>
+                            {{ airport.airportname }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_departureterminalid">Departure Terminal ID</label>
+                    <input type="number" name="departureterminalid" id="id_departureterminalid" value="{{ flight.departureterminalid.terminalid }}" required>
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="id_arrivalterminalid">Arrival Terminal ID</label>
+                    <input type="number" name="arrivalterminalid" id="id_arrivalterminalid" value="{{ flight.arrivalterminalid.terminalid }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_departuregatenumber">Departure Gate Number</label>
+                    <input type="number" name="departuregatenumber" id="id_departuregatenumber" value="{{ flight.departuregatenumber }}" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_arrivalgatenumber">Arrival Gate Number</label>
+                <input type="number" name="arrivalgatenumber" id="id_arrivalgatenumber" value="{{ flight.arrivalgatenumber }}" required>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button type="submit" class="btn btn-success">💾 Save Changes</button>
+                <a href="{% url 'flights_list' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
