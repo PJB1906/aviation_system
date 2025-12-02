@@ -1,0 +1,81 @@
+<!-- ============================================================================ -->
+<!-- FILE 16: aviation/templates/aviation/airline_detail.html -->
+<!-- ============================================================================ -->
+{% extends 'aviation/base.html' %}
+
+{% block title %}{{ airline.airlinename }} - Aviation System{% endblock %}
+
+{% block content %}
+<a href="{% url 'airlines_list' %}" style="color: #667eea; text-decoration: none; margin-bottom: 1rem; display: inline-block;">← Back to Airlines</a>
+
+<h1>{{ airline.airlinename }}</h1>
+
+<div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div>
+            <strong>ICAO Code:</strong> {{ airline.airlineicao }}
+        </div>
+        <div>
+            <strong>Founded:</strong> {{ airline.foundedyear }}
+        </div>
+        <div>
+            <strong>Headquarters:</strong> {{ airline.headquarterscityid.cityname }}
+        </div>
+        <div>
+            <strong>Alliance:</strong> {{ airline.allianceid.alliancename }}
+        </div>
+    </div>
+</div>
+
+<h2>Flights</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Flight Number</th>
+            <th>Departure</th>
+            <th>Arrival</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for flight in flights %}
+        <tr>
+            <td>{{ flight.flightnumber }}</td>
+            <td>{{ flight.scheduleddeparture }}</td>
+            <td>{{ flight.scheduledarrival }}</td>
+            <td>{{ flight.flightstatus }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" style="text-align: center; color: #999;">No flights found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2 style="margin-top: 2rem;">Aircraft Fleet</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Aircraft ID</th>
+            <th>Type</th>
+            <th>Manufacture Year</th>
+            <th>Last Maintenance</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ac in aircraft %}
+        <tr>
+            <td>{{ ac.aircraftid }}</td>
+            <td>{{ ac.aircrafttypecode.typename }}</td>
+            <td>{{ ac.manufactureyear }}</td>
+            <td>{{ ac.lastmaintenancedate }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" style="text-align: center; color: #999;">No aircraft found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

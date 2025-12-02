@@ -1,0 +1,37 @@
+<!-- ============================================================================ -->
+<!-- FILE 15: aviation/templates/aviation/airlines_list.html -->
+<!-- ============================================================================ -->
+{% extends 'aviation/base.html' %}
+
+{% block title %}Airlines - Aviation System{% endblock %}
+
+{% block content %}
+<h1>All Airlines</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Airline ID</th>
+            <th>Airline Name</th>
+            <th>ICAO Code</th>
+            <th>Headquarters</th>
+            <th>Founded Year</th>
+            <th>Alliance</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for airline in airlines %}
+        <tr>
+            <td>{{ airline.airlineid }}</td>
+            <td>{{ airline.airlinename }}</td>
+            <td>{{ airline.airlineicao }}</td>
+            <td>{{ airline.headquarterscityid.cityname }}</td>
+            <td>{{ airline.foundedyear }}</td>
+            <td>{{ airline.allianceid.alliancename }}</td>
+            <td><a href="{% url 'airline_detail' airline.airlineid %}" style="color: #667eea; text-decoration: none;">View Details</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

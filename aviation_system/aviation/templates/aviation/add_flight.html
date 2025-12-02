@@ -1,0 +1,106 @@
+<!-- ============================================================================ -->
+<!-- FILE 10: aviation/templates/aviation/add_flight.html -->
+<!-- ============================================================================ -->
+{% extends 'aviation/base.html' %}
+
+{% block title %}Add Flight - Aviation System{% endblock %}
+
+{% block content %}
+<h1>Add New Flight</h1>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="form-group">
+            <label>{{ form.flightid.label }}</label>
+            {{ form.flightid }}
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.flightnumber.label }}</label>
+            {{ form.flightnumber }}
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.scheduleddeparture.label }}</label>
+            {{ form.scheduleddeparture }}
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.scheduledarrival.label }}</label>
+            {{ form.scheduledarrival }}
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.flightstatus.label }}</label>
+            {{ form.flightstatus }}
+        </div>
+        
+        <div class="form-group">
+            <label>Airline</label>
+            <select name="airlineid">
+                {% for airline in airlines %}
+                <option value="{{ airline.airlineid }}">{{ airline.airlinename }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Aircraft</label>
+            <select name="aircraftid">
+                {% for ac in aircraft %}
+                <option value="{{ ac.aircraftid }}">{{ ac.aircraftid }} - {{ ac.aircrafttypecode.typename }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Departure Airport</label>
+            <select name="departureairportcode">
+                {% for airport in airports %}
+                <option value="{{ airport.airportcode }}">{{ airport.airportname }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Arrival Airport</label>
+            <select name="arrivalairportcode">
+                {% for airport in airports %}
+                <option value="{{ airport.airportcode }}">{{ airport.airportname }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.departureterminalid.label }}</label>
+            {{ form.departureterminalid }}
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.arrivalterminalid.label }}</label>
+            {{ form.arrivalterminalid }}
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.departuregatenumber.label }}</label>
+            {{ form.departuregatenumber }}
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.arrivalgatenumber.label }}</label>
+            {{ form.arrivalgatenumber }}
+        </div>
+    </div>
+    
+    <div style="margin-top: 2rem;">
+        <button type="submit" class="btn">Add Flight</button>
+        <a href="{% url 'flights_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+    </div>
+</form>
+{% endblock %}
+
+<!-- Save remaining templates in separate files following same pattern -->
+<!-- passengers_list.html, add_passenger.html, bookings_list.html, -->
+<!-- add_booking.html, airlines_list.html, airports_list.html -->

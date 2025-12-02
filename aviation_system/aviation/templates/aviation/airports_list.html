@@ -1,0 +1,37 @@
+<!-- ============================================================================ -->
+<!-- FILE 17: aviation/templates/aviation/airports_list.html -->
+<!-- ============================================================================ -->
+{% extends 'aviation/base.html' %}
+
+{% block title %}Airports - Aviation System{% endblock %}
+
+{% block content %}
+<h1>All Airports</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Airport Code</th>
+            <th>Airport Name</th>
+            <th>City</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Timezone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for airport in airports %}
+        <tr>
+            <td>{{ airport.airportcode }}</td>
+            <td>{{ airport.airportname }}</td>
+            <td>{{ airport.cityid.cityname }}</td>
+            <td>{{ airport.latitude }}</td>
+            <td>{{ airport.longitude }}</td>
+            <td>{{ airport.timezone }}</td>
+            <td><a href="{% url 'airport_detail' airport.airportcode %}" style="color: #667eea; text-decoration: none;">View Details</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,128 @@
+<!-- ============================================================================ -->
+<!-- FILE 8: aviation/templates/aviation/home.html -->
+<!-- ============================================================================ -->
+{% extends 'aviation/base.html' %}
+
+{% block title %}Home - Aviation System{% endblock %}
+
+{% block extra_css %}
+<style>
+    .home-intro {
+        margin-bottom: 2rem;
+        color: #666;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+        padding: 2rem;
+        border-radius: 10px;
+        color: white;
+    }
+    
+    .stat-card h3 {
+        color: white;
+        font-size: 2rem;
+    }
+    
+    .stat-card-flights {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .stat-card-passengers {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+    
+    .stat-card-bookings {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    
+    .stat-card-airlines {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+    
+    .management-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .management-card {
+        border-radius: 10px;
+        padding: 1.5rem;
+    }
+    
+    .management-card-flights {
+        border: 2px solid #667eea;
+    }
+    
+    .management-card-passengers {
+        border: 2px solid #f5576c;
+    }
+    
+    .management-card-bookings {
+        border: 2px solid #00f2fe;
+    }
+    
+    .management-card p {
+        color: #666;
+        margin: 1rem 0;
+    }
+    
+    .management-card a + a {
+        margin-left: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Welcome to Aviation Management System</h1>
+<p class="home-intro">Manage flights, passengers, bookings, and more from one place.</p>
+
+<div class="stats-grid">
+    <div class="stat-card stat-card-flights">
+        <h3>{{ total_flights }}</h3>
+        <p>Total Flights</p>
+    </div>
+    <div class="stat-card stat-card-passengers">
+        <h3>{{ total_passengers }}</h3>
+        <p>Total Passengers</p>
+    </div>
+    <div class="stat-card stat-card-bookings">
+        <h3>{{ total_bookings }}</h3>
+        <p>Confirmed Bookings</p>
+    </div>
+    <div class="stat-card stat-card-airlines">
+        <h3>{{ total_airlines }}</h3>
+        <p>Total Airlines</p>
+    </div>
+</div>
+
+<div class="management-grid">
+    <div class="management-card management-card-flights">
+        <h3>Manage Flights</h3>
+        <p>View, add, and manage flight schedules</p>
+        <a href="{% url 'flights_list' %}" class="btn">View Flights</a>
+        <a href="{% url 'add_flight' %}" class="btn btn-secondary">Add Flight</a>
+    </div>
+    
+    <div class="management-card management-card-passengers">
+        <h3>Manage Passengers</h3>
+        <p>View and register passenger information</p>
+        <a href="{% url 'passengers_list' %}" class="btn">View Passengers</a>
+        <a href="{% url 'add_passenger' %}" class="btn btn-secondary">Add Passenger</a>
+    </div>
+    
+    <div class="management-card management-card-bookings">
+        <h3>Manage Bookings</h3>
+        <p>Handle flight bookings and reservations</p>
+        <a href="{% url 'bookings_list' %}" class="btn">View Bookings</a>
+        <a href="{% url 'add_booking' %}" class="btn btn-secondary">Create Booking</a>
+    </div>
+</div>
+{% endblock %}
