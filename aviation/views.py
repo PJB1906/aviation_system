@@ -98,7 +98,7 @@ def home(request):
     # Get recent flights
     recent_flights = Flight.objects.select_related(
         'airlineid', 'departureairportcode', 'arrivalairportcode'
-    ).order_by('-scheduleddeparture')[:5]
+    ).order_by('-scheduleddeparture')[:25]
     
     context = {
         'total_flights': total_flights,

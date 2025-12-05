@@ -1,6 +1,6 @@
 {% extends 'aviation/base.html' %}
 
-{% block title %}Airport Details - AviationDB{% endblock %}
+{% block title %}Airport Details - Aviation Management Console{% endblock %}
 
 {% block content %}
 <div class="page-header">
@@ -21,40 +21,40 @@
         <h2 class="content-box-title">Airport Information</h2>
     </div>
     <div class="content-box-body">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
             <div>
-                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Airport Code</p>
-                <p style="font-size: 1.125rem; font-weight: 500;">{{ airport.airportcode }}</p>
+                <strong style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #64748b;">Airport Code</strong>
+                <span style="font-size: 1.125rem; font-weight: 600; color: #0f172a;">{{ airport.airportcode }}</span>
             </div>
             
             <div>
-                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Airport Name</p>
-                <p style="font-size: 1.125rem; font-weight: 500;">{{ airport.airportname }}</p>
+                <strong style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #64748b;">Airport Name</strong>
+                <span style="font-size: 1.125rem; font-weight: 600; color: #0f172a;">{{ airport.airportname }}</span>
             </div>
             
             <div>
-                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">City</p>
-                <p style="font-size: 1.125rem; font-weight: 500;">{{ airport.cityid.cityname }}</p>
+                <strong style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #64748b;">City</strong>
+                <span style="font-size: 1.125rem; font-weight: 600; color: #0f172a;">{{ airport.cityid.cityname }}</span>
             </div>
             
             <div>
-                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Country</p>
-                <p style="font-size: 1.125rem; font-weight: 500;">{{ airport.cityid.countrycode.countryname }}</p>
+                <strong style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #64748b;">Country</strong>
+                <span style="font-size: 1.125rem; font-weight: 600; color: #0f172a;">{{ airport.cityid.countrycode.countryname }}</span>
             </div>
             
             <div>
-                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Latitude</p>
-                <p style="font-size: 1.125rem; font-weight: 500;">{{ airport.latitude }}°</p>
+                <strong style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #64748b;">Latitude</strong>
+                <span style="font-size: 1.125rem; font-weight: 600; color: #0f172a;">{{ airport.latitude }}°</span>
             </div>
             
             <div>
-                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Longitude</p>
-                <p style="font-size: 1.125rem; font-weight: 500;">{{ airport.longitude }}°</p>
+                <strong style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #64748b;">Longitude</strong>
+                <span style="font-size: 1.125rem; font-weight: 600; color: #0f172a;">{{ airport.longitude }}°</span>
             </div>
             
             <div>
-                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Timezone</p>
-                <p style="font-size: 1.125rem; font-weight: 500;">{{ airport.timezone }}</p>
+                <strong style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #64748b;">Timezone</strong>
+                <span style="font-size: 1.125rem; font-weight: 600; color: #0f172a;">{{ airport.timezone }}</span>
             </div>
         </div>
     </div>
@@ -86,7 +86,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                    <td colspan="5" style="text-align: center; color: #64748b; padding: 2rem;">
                         No departing flights found.
                     </td>
                 </tr>
@@ -122,7 +122,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                    <td colspan="5" style="text-align: center; color: #64748b; padding: 2rem;">
                         No arriving flights found.
                     </td>
                 </tr>

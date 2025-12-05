@@ -1,6 +1,6 @@
 {% extends 'aviation/base.html' %}
 
-{% block title %}Dashboard - AviationDB{% endblock %}
+{% block title %}Dashboard - Aviation Management Console{% endblock %}
 
 {% block content %}
 <div class="page-header">
@@ -20,7 +20,7 @@
             <div class="stat-icon">✈️</div>
         </div>
     </div>
-    
+
     <div class="stat-card green">
         <div class="stat-header">
             <div>
@@ -31,7 +31,7 @@
             <div class="stat-icon">🛩️</div>
         </div>
     </div>
-    
+
     <div class="stat-card orange">
         <div class="stat-header">
             <div>
@@ -42,7 +42,7 @@
             <div class="stat-icon">🛫</div>
         </div>
     </div>
-    
+
     <div class="stat-card purple">
         <div class="stat-header">
             <div>
@@ -82,15 +82,15 @@
                     <td>{{ flight.arrivalairportcode.airportcode }}</td>
                     <td>
                         {% if flight.flightstatus == 'Completed' %}
-                            <span class="badge badge-success">{{ flight.flightstatus }}</span>
+                        <span class="badge badge-success">{{ flight.flightstatus }}</span>
                         {% elif flight.flightstatus == 'In-Flight' %}
-                            <span class="badge badge-info">{{ flight.flightstatus }}</span>
+                        <span class="badge badge-info">{{ flight.flightstatus }}</span>
                         {% elif flight.flightstatus == 'Delayed' %}
-                            <span class="badge badge-warning">{{ flight.flightstatus }}</span>
+                        <span class="badge badge-warning">{{ flight.flightstatus }}</span>
                         {% elif flight.flightstatus == 'Cancelled' %}
-                            <span class="badge badge-danger">{{ flight.flightstatus }}</span>
+                        <span class="badge badge-danger">{{ flight.flightstatus }}</span>
                         {% else %}
-                            <span class="badge badge-info">{{ flight.flightstatus }}</span>
+                        <span class="badge badge-info">{{ flight.flightstatus }}</span>
                         {% endif %}
                     </td>
                     <td>{{ flight.scheduleddeparture|date:"Y-m-d H:i" }}</td>

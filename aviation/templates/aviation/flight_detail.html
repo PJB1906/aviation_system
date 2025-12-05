@@ -1,76 +1,106 @@
 {% extends 'aviation/base.html' %}
 
-{% block title %}Flight {{ flight.flightnumber }} - Aviation System{% endblock %}
+{% block title %}Flight {{ flight.flightnumber }} - Aviation Management Console{% endblock %}
 
 {% block content %}
-<a href="{% url 'flights_list' %}" style="color: #60a5fa; text-decoration: none; margin-bottom: 1rem; display: inline-block;">← Back to Flights</a>
+<div class="page-header">
+    <a href="{% url 'flights_list' %}" class="btn btn-secondary" style="margin-bottom: 1rem;">← Back to Flights</a>
+    <h1 class="page-title">Flight {{ flight.flightnumber }}</h1>
+</div>
 
-<h1 style="color: #fff; margin-bottom: 1.5rem;">Flight {{ flight.flightnumber }}</h1>
-
-<div style="background: rgba(30, 41, 59, 0.5); padding: 2rem; border-radius: 12px; margin-bottom: 2rem; border: 1px solid #334155;">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-        <div style="color: #e2e8f0;">
-            <strong style="color: #94a3b8; display: block; margin-bottom: 0.25rem; font-size: 0.875rem;">Airline:</strong>
-            <span style="color: #fff; font-size: 1.125rem;">{{ flight.airlineid.airlinename }}</span>
+<div class="content-box">
+    <div class="content-box-header">
+        <h2 class="content-box-title">Flight Details</h2>
+    </div>
+    <div class="content-box-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+            <div>
+                <strong style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #64748b;">Airline</strong>
+                <span style="font-size: 1.125rem; font-weight: 600; color: #0f172a;">{{ flight.airlineid.airlinename }}</span>
+            </div>
+            <div>
+                <strong style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #64748b;">Status</strong>
+                {% if flight.flightstatus == 'Completed' %}
+                    <span class="badge badge-success">Completed</span>
+                {% elif flight.flightstatus == 'In-Flight' %}
+                    <span class="badge badge-info">In Air</span>
+                {% elif flight.flightstatus == 'Delayed' %}
+                    <span class="badge badge-warning">Delayed</span>
+                {% elif flight.flightstatus == 'Cancelled' %}
+                    <span class="badge badge-danger">Cancelled</span>
+                {% else %}
+                    <span class="badge badge-info">{{ flight.flightstatus }}</span>
+                {% endif %}
+            </div>
+            <div>
+                <strong style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #64748b;">Departure</strong>
+                <span style="font-size: 1.125rem; font-weight: 600; color: #0f172a;">{{ flight.departureairportcode.airportname }}</span>
+            </div>
+            <div>
+                <strong style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #64748b;">Arrival</strong>
+                <span style="font-size: 1.125rem; font-weight: 600; color: #0f172a;">{{ flight.arrivalairportcode.airportname }}</span>
+            </div>
+            <div>
+                <strong style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #64748b;">Scheduled Departure</strong>
+                <span style="color: #0f172a;">{{ flight.scheduleddeparture }}</span>
+            </div>
+            <div>
+                <strong style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #64748b;">Scheduled Arrival</strong>
+                <span style="color: #0f172a;">{{ flight.scheduledarrival }}</span>
+            </div>
+            {% if flight.actualdeparture %}
+            <div>
+                <strong style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #64748b;">Actual Departure</strong>
+                <span style="color: #0f172a;">{{ flight.actualdeparture }}</span>
+            </div>
+            {% endif %}
+            {% if flight.actualarrival %}
+            <div>
+                <strong style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #64748b;">Actual Arrival</strong>
+                <span style="color: #0f172a;">{{ flight.actualarrival }}</span>
+            </div>
+            {% endif %}
         </div>
-        <div style="color: #e2e8f0;">
-            <strong style="color: #94a3b8; display: block; margin-bottom: 0.25rem; font-size: 0.875rem;">Status:</strong>
-            <span style="padding: 0.5rem 1rem; background: {% if flight.flightstatus == 'Completed' %}#10b981{% elif flight.flightstatus == 'Delayed' %}#f59e0b{% elif flight.flightstatus == 'Cancelled' %}#ef4444{% else %}#3b82f6{% endif %}; color: #fff; border-radius: 20px; font-size: 0.875rem; font-weight: 600; display: inline-block;">{{ flight.flightstatus }}</span>
-        </div>
-        <div style="color: #e2e8f0;">
-            <strong style="color: #94a3b8; display: block; margin-bottom: 0.25rem; font-size: 0.875rem;">Departure:</strong>
-            <span style="color: #fff; font-size: 1.125rem;">{{ flight.departureairportcode.airportname }}</span>
-        </div>
-        <div style="color: #e2e8f0;">
-            <strong style="color: #94a3b8; display: block; margin-bottom: 0.25rem; font-size: 0.875rem;">Arrival:</strong>
-            <span style="color: #fff; font-size: 1.125rem;">{{ flight.arrivalairportcode.airportname }}</span>
-        </div>
-        <div style="color: #e2e8f0;">
-            <strong style="color: #94a3b8; display: block; margin-bottom: 0.25rem; font-size: 0.875rem;">Scheduled Departure:</strong>
-            <span style="color: #fff;">{{ flight.scheduleddeparture }}</span>
-        </div>
-        <div style="color: #e2e8f0;">
-            <strong style="color: #94a3b8; display: block; margin-bottom: 0.25rem; font-size: 0.875rem;">Scheduled Arrival:</strong>
-            <span style="color: #fff;">{{ flight.scheduledarrival }}</span>
-        </div>
-        {% if flight.actualdeparture %}
-        <div style="color: #e2e8f0;">
-            <strong style="color: #94a3b8; display: block; margin-bottom: 0.25rem; font-size: 0.875rem;">Actual Departure:</strong>
-            <span style="color: #fff;">{{ flight.actualdeparture }}</span>
-        </div>
-        {% endif %}
-        {% if flight.actualarrival %}
-        <div style="color: #e2e8f0;">
-            <strong style="color: #94a3b8; display: block; margin-bottom: 0.25rem; font-size: 0.875rem;">Actual Arrival:</strong>
-            <span style="color: #fff;">{{ flight.actualarrival }}</span>
-        </div>
-        {% endif %}
     </div>
 </div>
 
-<h2 style="color: #fff; margin-bottom: 1rem;">Passengers on this Flight</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Passenger Name</th>
-            <th>Seat Number</th>
-            <th>Ticket Status</th>
-            <th>Checked In</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for ticket in tickets %}
-        <tr>
-            <td>{{ ticket.passengerid.firstname }} {{ ticket.passengerid.lastname }}</td>
-            <td>{{ ticket.seatnumber }}</td>
-            <td>{{ ticket.ticketstatus }}</td>
-            <td>{% if ticket.checkedina %}{{ ticket.checkedina }}{% else %}Not checked in{% endif %}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4" style="text-align: center; color: #999;">No passengers booked yet</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="content-box" style="margin-top: 2rem;">
+    <div class="content-box-header">
+        <h2 class="content-box-title">Passengers on this Flight</h2>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Passenger Name</th>
+                    <th>Seat Number</th>
+                    <th>Ticket Status</th>
+                    <th>Checked In</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                <tr>
+                    <td><strong>{{ ticket.passengerid.firstname }} {{ ticket.passengerid.lastname }}</strong></td>
+                    <td>{{ ticket.seatnumber }}</td>
+                    <td>
+                        <span class="badge badge-info">{{ ticket.ticketstatus }}</span>
+                    </td>
+                    <td>
+                        {% if ticket.checkedina %}
+                            <span class="badge badge-success">Yes</span>
+                        {% else %}
+                            <span class="badge badge-warning">No</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center; color: #64748b; padding: 2rem;">No passengers booked yet</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
