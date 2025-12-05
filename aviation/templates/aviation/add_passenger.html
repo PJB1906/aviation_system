@@ -1,0 +1,68 @@
+
+{% extends 'aviation/base.html' %}
+
+{% block title %}Add Passenger - Aviation System{% endblock %}
+
+{% block content %}
+<h1>Register New Passenger</h1>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="form-group">
+            <label>{{ form.passengerid.label }}</label>
+            {{ form.passengerid }}
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.firstname.label }}</label>
+            {{ form.firstname }}
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.lastname.label }}</label>
+            {{ form.lastname }}
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.email.label }}</label>
+            {{ form.email }}
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.phone.label }}</label>
+            {{ form.phone }}
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.dateofbirth.label }}</label>
+            {{ form.dateofbirth }}
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.passportnumber.label }}</label>
+            {{ form.passportnumber }}
+        </div>
+        
+        <div class="form-group">
+            <label>Country</label>
+            <select name="countrycode">
+                {% for country in countries %}
+                <option value="{{ country.countrycode }}">{{ country.countryname }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.nationality.label }}</label>
+            {{ form.nationality }}
+        </div>
+    </div>
+    
+    <div style="margin-top: 2rem;">
+        <button type="submit" class="btn">Register Passenger</button>
+        <a href="{% url 'passengers_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+    </div>
+</form>
+{% endblock %}

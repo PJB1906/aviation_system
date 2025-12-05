@@ -1,0 +1,78 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Add Crew Member - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Add New Crew Member</h1>
+        <p class="page-subtitle">Register a new crew member</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Crew ID</label>
+                <input type="number" name="crewid" required>
+            </div>
+            
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" name="firstname" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" name="lastname" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="date" name="dateofbirth" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Hire Date</label>
+                <input type="date" name="hiredate" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Crew Type</label>
+                <select name="crewtype" required>
+                    <option value="1">Pilot</option>
+                    <option value="2">Co-Pilot</option>
+                    <option value="3">Flight Attendant</option>
+                    <option value="4">Engineer</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Airline</label>
+                <select name="airlineid" required>
+                    {% for airline in airlines %}
+                    <option value="{{ airline.airlineid }}">{{ airline.airlinename }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Base Airport</label>
+                <select name="airportcode" required>
+                    {% for airport in airports %}
+                    <option value="{{ airport.airportcode }}">{{ airport.airportname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn">Add Crew Member</button>
+            <a href="{% url 'crew_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

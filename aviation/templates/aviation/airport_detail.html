@@ -1,0 +1,134 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Airport Details - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">{{ airport.airportname }}</h1>
+            <p class="page-subtitle">Airport Code: {{ airport.airportcode }}</p>
+        </div>
+        <div>
+            <a href="{% url 'edit_airport' airport.airportcode %}" class="btn">Edit Airport</a>
+            <a href="{% url 'airports_list' %}" class="btn btn-secondary" style="margin-left: 0.5rem;">Back to List</a>
+        </div>
+    </div>
+</div>
+
+<div class="content-box">
+    <div class="content-box-header">
+        <h2 class="content-box-title">Airport Information</h2>
+    </div>
+    <div class="content-box-body">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Airport Code</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ airport.airportcode }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Airport Name</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ airport.airportname }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">City</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ airport.cityid.cityname }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Country</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ airport.cityid.countrycode.countryname }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Latitude</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ airport.latitude }}°</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Longitude</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ airport.longitude }}°</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Timezone</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ airport.timezone }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content-box" style="margin-top: 2rem;">
+    <div class="content-box-header">
+        <h2 class="content-box-title">Departing Flights ({{ departing_flights|length }})</h2>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Flight ID</th>
+                    <th>Destination</th>
+                    <th>Departure Time</th>
+                    <th>Airline</th>
+                    <th>Aircraft</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight in departing_flights %}
+                <tr>
+                    <td><strong>{{ flight.flightid }}</strong></td>
+                    <td>{{ flight.destinationairportcode.airportname }}</td>
+                    <td>{{ flight.departuredatetime|date:"M d, Y H:i" }}</td>
+                    <td>{{ flight.airlineid.airlinename }}</td>
+                    <td>Aircraft #{{ flight.aircraftid.aircraftid }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                        No departing flights found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="content-box" style="margin-top: 2rem;">
+    <div class="content-box-header">
+        <h2 class="content-box-title">Arriving Flights ({{ arriving_flights|length }})</h2>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Flight ID</th>
+                    <th>Origin</th>
+                    <th>Arrival Time</th>
+                    <th>Airline</th>
+                    <th>Aircraft</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight in arriving_flights %}
+                <tr>
+                    <td><strong>{{ flight.flightid }}</strong></td>
+                    <td>{{ flight.originairportcode.airportname }}</td>
+                    <td>{{ flight.arrivaldatetime|date:"M d, Y H:i" }}</td>
+                    <td>{{ flight.airlineid.airlinename }}</td>
+                    <td>Aircraft #{{ flight.aircraftid.aircraftid }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                        No arriving flights found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

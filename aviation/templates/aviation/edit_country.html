@@ -1,0 +1,35 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Edit Country - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Edit Country #{{ country.countrycode }}</h1>
+        <p class="page-subtitle">Update country information</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Country Code</label>
+                <input type="number" name="countrycode" value="{{ country.countrycode }}" readonly style="background-color: #374151; cursor: not-allowed;">
+            </div>
+            
+            <div class="form-group">
+                <label>Country Name</label>
+                <input type="text" name="countryname" value="{{ country.countryname }}" required>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn">Update Country</button>
+            <a href="{% url 'countries_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Add Airport - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Add New Airport</h1>
+        <p class="page-subtitle">Register a new airport</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Airport Code</label>
+                <input type="number" name="airportcode" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Airport Name</label>
+                <input type="text" name="airportname" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Latitude</label>
+                <input type="number" step="0.000001" name="latitude" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Longitude</label>
+                <input type="number" step="0.000001" name="longitude" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Timezone</label>
+                <input type="text" name="timezone" required>
+            </div>
+            
+            <div class="form-group">
+                <label>City</label>
+                <select name="cityid" required>
+                    {% for city in cities %}
+                    <option value="{{ city.cityid }}">{{ city.cityname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn">Add Airport</button>
+            <a href="{% url 'airports_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Passenger Details - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">Passenger #{{ passenger.passengerid }}</h1>
+            <p class="page-subtitle">{{ passenger.firstname }} {{ passenger.lastname }}</p>
+        </div>
+        <div>
+            <a href="{% url 'edit_passenger' passenger.passengerid %}" class="btn">Edit Passenger</a>
+            <a href="{% url 'passengers_list' %}" class="btn btn-secondary" style="margin-left: 0.5rem;">Back to List</a>
+        </div>
+    </div>
+</div>
+
+<div class="content-box">
+    <div class="content-box-header">
+        <h2 class="content-box-title">Personal Information</h2>
+    </div>
+    <div class="content-box-body">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Full Name</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ passenger.firstname }} {{ passenger.lastname }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Email</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ passenger.email }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Phone</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ passenger.phone }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Date of Birth</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ passenger.dateofbirth|date:"F d, Y" }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Passport Number</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ passenger.passportnumber }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Country</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ passenger.countrycode.countryname }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Nationality</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ passenger.nationality }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content-box" style="margin-top: 2rem;">
+    <div class="content-box-header">
+        <h2 class="content-box-title">Bookings ({{ bookings|length }})</h2>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Channel</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td><strong>{{ booking.bookingid }}</strong></td>
+                    <td>{{ booking.bookingdate|date:"M d, Y" }}</td>
+                    <td>{{ booking.currencycode.currencysymbol }}{{ booking.totalamount }}</td>
+                    <td>
+                        {% if booking.bookingstatus == 'Confirmed' %}
+                            <span class="badge badge-success">{{ booking.bookingstatus }}</span>
+                        {% elif booking.bookingstatus == 'Pending' %}
+                            <span class="badge badge-warning">{{ booking.bookingstatus }}</span>
+                        {% else %}
+                            <span class="badge badge-danger">{{ booking.bookingstatus }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ booking.bookingchannel }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                        No bookings found for this passenger.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

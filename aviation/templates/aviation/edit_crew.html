@@ -1,0 +1,82 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Edit Crew Member - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Edit Crew Member #{{ crew.crewid }}</h1>
+        <p class="page-subtitle">Update crew member information</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Crew ID</label>
+                <input type="number" name="crewid" value="{{ crew.crewid }}" readonly style="background-color: #374151; cursor: not-allowed;">
+            </div>
+            
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" name="firstname" value="{{ crew.firstname }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" name="lastname" value="{{ crew.lastname }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="date" name="dateofbirth" value="{{ crew.dateofbirth|date:'Y-m-d' }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Hire Date</label>
+                <input type="date" name="hiredate" value="{{ crew.hiredate|date:'Y-m-d' }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Crew Type</label>
+                <select name="crewtype" required>
+                    <option value="1" {% if crew.crewtype == 1 %}selected{% endif %}>Pilot</option>
+                    <option value="2" {% if crew.crewtype == 2 %}selected{% endif %}>Co-Pilot</option>
+                    <option value="3" {% if crew.crewtype == 3 %}selected{% endif %}>Flight Attendant</option>
+                    <option value="4" {% if crew.crewtype == 4 %}selected{% endif %}>Engineer</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Airline</label>
+                <select name="airlineid" required>
+                    {% for airline in airlines %}
+                    <option value="{{ airline.airlineid }}" {% if crew.airlineid.airlineid == airline.airlineid %}selected{% endif %}>
+                        {{ airline.airlinename }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Base Airport</label>
+                <select name="airportcode" required>
+                    {% for airport in airports %}
+                    <option value="{{ airport.airportcode }}" {% if crew.airportcode.airportcode == airport.airportcode %}selected{% endif %}>
+                        {{ airport.airportname }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn">Update Crew Member</button>
+            <a href="{% url 'crew_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Edit Airline - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Edit Airline #{{ airline.airlineid }}</h1>
+        <p class="page-subtitle">Update airline information</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Airline ID</label>
+                <input type="number" name="airlineid" value="{{ airline.airlineid }}" readonly style="background-color: #374151; cursor: not-allowed;">
+            </div>
+            
+            <div class="form-group">
+                <label>Airline Name</label>
+                <input type="text" name="airlinename" value="{{ airline.airlinename }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>ICAO Code</label>
+                <input type="text" name="airlineicao" value="{{ airline.airlineicao }}" maxlength="10" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Headquarters City</label>
+                <select name="headquarterscityid" required>
+                    {% for city in cities %}
+                    <option value="{{ city.cityid }}" {% if airline.headquarterscityid.cityid == city.cityid %}selected{% endif %}>
+                        {{ city.cityname }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Founded Year</label>
+                <input type="number" name="foundedyear" value="{{ airline.foundedyear }}" min="1900" max="2100" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Alliance</label>
+                <select name="allianceid" required>
+                    {% for alliance in alliances %}
+                    <option value="{{ alliance.allianceid }}" {% if airline.allianceid.allianceid == alliance.allianceid %}selected{% endif %}>
+                        {{ alliance.alliancename }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn">Update Airline</button>
+            <a href="{% url 'airlines_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

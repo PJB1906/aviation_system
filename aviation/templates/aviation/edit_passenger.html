@@ -1,0 +1,76 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Edit Passenger - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Edit Passenger #{{ passenger.passengerid }}</h1>
+        <p class="page-subtitle">Update passenger information</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Passenger ID</label>
+                <input type="number" name="passengerid" value="{{ passenger.passengerid }}" readonly style="background-color: #374151; cursor: not-allowed;">
+            </div>
+            
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" name="firstname" value="{{ passenger.firstname }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" name="lastname" value="{{ passenger.lastname }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" value="{{ passenger.email }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="text" name="phone" value="{{ passenger.phone }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="date" name="dateofbirth" value="{{ passenger.dateofbirth|date:'Y-m-d' }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Passport Number</label>
+                <input type="text" name="passportnumber" value="{{ passenger.passportnumber }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Country</label>
+                <select name="countrycode" required>
+                    {% for country in countries %}
+                    <option value="{{ country.countrycode }}" {% if passenger.countrycode.countrycode == country.countrycode %}selected{% endif %}>
+                        {{ country.countryname }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Nationality</label>
+                <input type="text" name="nationality" value="{{ passenger.nationality }}" required>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn">Update Passenger</button>
+            <a href="{% url 'passengers_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

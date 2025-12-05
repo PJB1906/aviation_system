@@ -1,0 +1,66 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Add Route - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Add New Route</h1>
+        <p class="page-subtitle">Create a new flight route</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Route ID</label>
+                <input type="number" name="routeid" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Distance (KM)</label>
+                <input type="number" name="distancekm" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Estimated Duration (Minutes)</label>
+                <input type="number" name="estimateddurationmins" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Route Type</label>
+                <select name="routetype" required>
+                    <option value="0">Domestic</option>
+                    <option value="1">International</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Origin Airport</label>
+                <select name="originairportcode" required>
+                    {% for airport in airports %}
+                    <option value="{{ airport.airportcode }}">{{ airport.airportname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Destination Airport</label>
+                <select name="destinationairportcode" required>
+                    {% for airport in airports %}
+                    <option value="{{ airport.airportcode }}">{{ airport.airportname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn">Add Route</button>
+            <a href="{% url 'routes_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

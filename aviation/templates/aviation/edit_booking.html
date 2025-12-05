@@ -1,0 +1,81 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Edit Booking - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Edit Booking #{{ booking.bookingid }}</h1>
+        <p class="page-subtitle">Update booking information</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Booking ID</label>
+                <input type="number" name="bookingid" value="{{ booking.bookingid }}" readonly style="background-color: #374151; cursor: not-allowed;">
+            </div>
+            
+            <div class="form-group">
+                <label>Booking Date</label>
+                <input type="datetime-local" name="bookingdate" value="{{ booking.bookingdate|date:'Y-m-d\TH:i' }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Total Amount</label>
+                <input type="number" step="0.01" name="totalamount" value="{{ booking.totalamount }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Booking Status</label>
+                <select name="bookingstatus" required>
+                    <option value="Confirmed" {% if booking.bookingstatus == 'Confirmed' %}selected{% endif %}>Confirmed</option>
+                    <option value="Pending" {% if booking.bookingstatus == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="Cancelled" {% if booking.bookingstatus == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Booking Channel</label>
+                <select name="bookingchannel" required>
+                    <option value="Website" {% if booking.bookingchannel == 'Website' %}selected{% endif %}>Website</option>
+                    <option value="Mobile App" {% if booking.bookingchannel == 'Mobile App' %}selected{% endif %}>Mobile App</option>
+                    <option value="Call Center" {% if booking.bookingchannel == 'Call Center' %}selected{% endif %}>Call Center</option>
+                    <option value="Travel Agent" {% if booking.bookingchannel == 'Travel Agent' %}selected{% endif %}>Travel Agent</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Passenger</label>
+                <select name="passengerid" required>
+                    {% for passenger in passengers %}
+                    <option value="{{ passenger.passengerid }}" {% if booking.passengerid.passengerid == passenger.passengerid %}selected{% endif %}>
+                        {{ passenger.firstname }} {{ passenger.lastname }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Currency</label>
+                <select name="currencycode" required>
+                    {% for currency in currencies %}
+                    <option value="{{ currency.currencycode }}" {% if booking.currencycode.currencycode == currency.currencycode %}selected{% endif %}>
+                        {{ currency.currencyname }} ({{ currency.currencysymbol }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn">Update Booking</button>
+            <a href="{% url 'bookings_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

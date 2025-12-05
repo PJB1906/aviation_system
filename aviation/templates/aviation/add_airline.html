@@ -1,0 +1,63 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Add Airline - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Add New Airline</h1>
+        <p class="page-subtitle">Register a new airline</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Airline ID</label>
+                <input type="number" name="airlineid" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Airline Name</label>
+                <input type="text" name="airlinename" required>
+            </div>
+            
+            <div class="form-group">
+                <label>ICAO Code</label>
+                <input type="text" name="airlineicao" maxlength="10" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Headquarters City</label>
+                <select name="headquarterscityid" required>
+                    {% for city in cities %}
+                    <option value="{{ city.cityid }}">{{ city.cityname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Founded Year</label>
+                <input type="number" name="foundedyear" min="1900" max="2100" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Alliance</label>
+                <select name="allianceid" required>
+                    {% for alliance in alliances %}
+                    <option value="{{ alliance.allianceid }}">{{ alliance.alliancename }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn">Add Airline</button>
+            <a href="{% url 'airlines_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

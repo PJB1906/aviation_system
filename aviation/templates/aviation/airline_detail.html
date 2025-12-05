@@ -1,0 +1,82 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}{{ airline.airlinename }} - Aviation System{% endblock %}
+
+{% block content %}
+<a href="{% url 'airlines_list' %}" style="color: #60a5fa; text-decoration: none; margin-bottom: 1rem; display: inline-block;">← Back to Airlines</a>
+
+<h1 style="color: #fff; margin-bottom: 1.5rem;">{{ airline.airlinename }}</h1>
+
+<div style="background: rgba(30, 41, 59, 0.5); padding: 2rem; border-radius: 12px; margin-bottom: 2rem; border: 1px solid #334155;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div style="color: #e2e8f0;">
+            <strong style="color: #94a3b8; display: block; margin-bottom: 0.25rem; font-size: 0.875rem;">ICAO Code:</strong>
+            <span style="color: #fff; font-size: 1.125rem;">{{ airline.airlineicao }}</span>
+        </div>
+        <div style="color: #e2e8f0;">
+            <strong style="color: #94a3b8; display: block; margin-bottom: 0.25rem; font-size: 0.875rem;">Founded:</strong>
+            <span style="color: #fff; font-size: 1.125rem;">{{ airline.foundedyear }}</span>
+        </div>
+        <div style="color: #e2e8f0;">
+            <strong style="color: #94a3b8; display: block; margin-bottom: 0.25rem; font-size: 0.875rem;">Headquarters:</strong>
+            <span style="color: #fff; font-size: 1.125rem;">{{ airline.headquarterscityid.cityname }}</span>
+        </div>
+        <div style="color: #e2e8f0;">
+            <strong style="color: #94a3b8; display: block; margin-bottom: 0.25rem; font-size: 0.875rem;">Alliance:</strong>
+            <span style="color: #fff; font-size: 1.125rem;">{{ airline.allianceid.alliancename }}</span>
+        </div>
+    </div>
+</div>
+
+<h2 style="color: #fff; margin-bottom: 1rem;">Flights</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Flight Number</th>
+            <th>Departure</th>
+            <th>Arrival</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for flight in flights %}
+        <tr>
+            <td>{{ flight.flightnumber }}</td>
+            <td>{{ flight.scheduleddeparture }}</td>
+            <td>{{ flight.scheduledarrival }}</td>
+            <td>{{ flight.flightstatus }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" style="text-align: center; color: #999;">No flights found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2 style="color: #fff; margin-top: 2rem; margin-bottom: 1rem;">Aircraft Fleet</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Aircraft ID</th>
+            <th>Type</th>
+            <th>Manufacture Year</th>
+            <th>Last Maintenance</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ac in aircraft %}
+        <tr>
+            <td>{{ ac.aircraftid }}</td>
+            <td>{{ ac.aircrafttypecode.typename }}</td>
+            <td>{{ ac.manufactureyear }}</td>
+            <td>{{ ac.lastmaintenancedate }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" style="text-align: center; color: #999;">No aircraft found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

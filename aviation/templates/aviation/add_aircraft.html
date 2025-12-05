@@ -1,0 +1,58 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Add Aircraft - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Add New Aircraft</h1>
+        <p class="page-subtitle">Register a new aircraft</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Aircraft ID</label>
+                <input type="number" name="aircraftid" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Manufacture Year</label>
+                <input type="number" name="manufactureyear" min="1900" max="2100" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Last Maintenance Date</label>
+                <input type="date" name="lastmaintenancedate" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Airline</label>
+                <select name="airlineid" required>
+                    {% for airline in airlines %}
+                    <option value="{{ airline.airlineid }}">{{ airline.airlinename }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Aircraft Type</label>
+                <select name="aircrafttypecode" required>
+                    {% for type in aircraft_types %}
+                    <option value="{{ type.aircrafttypecode }}">{{ type.typename }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn">Add Aircraft</button>
+            <a href="{% url 'aircraft_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

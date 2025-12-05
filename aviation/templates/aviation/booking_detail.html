@@ -1,0 +1,112 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Booking Details - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">Booking #{{ booking.bookingid }}</h1>
+            <p class="page-subtitle">
+                {% if booking.bookingstatus == 'Confirmed' %}
+                    <span class="badge badge-success">{{ booking.bookingstatus }}</span>
+                {% elif booking.bookingstatus == 'Pending' %}
+                    <span class="badge badge-warning">{{ booking.bookingstatus }}</span>
+                {% else %}
+                    <span class="badge badge-danger">{{ booking.bookingstatus }}</span>
+                {% endif %}
+            </p>
+        </div>
+        <div>
+            <a href="{% url 'edit_booking' booking.bookingid %}" class="btn">Edit Booking</a>
+            <a href="{% url 'bookings_list' %}" class="btn btn-secondary" style="margin-left: 0.5rem;">Back to List</a>
+        </div>
+    </div>
+</div>
+
+<div class="content-box">
+    <div class="content-box-header">
+        <h2 class="content-box-title">Booking Information</h2>
+    </div>
+    <div class="content-box-body">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Booking ID</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ booking.bookingid }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Booking Date</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ booking.bookingdate|date:"F d, Y H:i" }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Passenger</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">
+                    <a href="{% url 'passenger_detail' booking.passengerid.passengerid %}" style="color: #60a5fa;">
+                        {{ booking.passengerid.firstname }} {{ booking.passengerid.lastname }}
+                    </a>
+                </p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Total Amount</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ booking.currencycode.currencysymbol }} {{ booking.totalamount }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Booking Channel</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ booking.bookingchannel }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Status</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ booking.bookingstatus }}</p>
+            </div>
+            
+            <div>
+                <p style="color: #9ca3af; font-size: 0.875rem; margin-bottom: 0.5rem;">Currency</p>
+                <p style="font-size: 1.125rem; font-weight: 500;">{{ booking.currencycode.currencyname }} ({{ booking.currencycode.currencysymbol }})</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content-box" style="margin-top: 2rem;">
+    <div class="content-box-header">
+        <h2 class="content-box-title">Tickets ({{ tickets|length }})</h2>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Ticket ID</th>
+                    <th>Flight</th>
+                    <th>Seat Number</th>
+                    <th>Class</th>
+                    <th>Price</th>
+                    <th>Baggage Allowance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                <tr>
+                    <td><strong>{{ ticket.ticketid }}</strong></td>
+                    <td>Flight #{{ ticket.flightid.flightid }}</td>
+                    <td>{{ ticket.seatnumber }}</td>
+                    <td>{{ ticket.classid.classname }}</td>
+                    <td>{{ booking.currencycode.currencysymbol }}{{ ticket.price }}</td>
+                    <td>{{ ticket.baggageallowance }} kg</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                        No tickets found for this booking.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

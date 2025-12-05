@@ -1,0 +1,77 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Add Maintenance Record - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Add New Maintenance Record</h1>
+        <p class="page-subtitle">Create a new maintenance record</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Maintenance ID</label>
+                <input type="number" name="maintenanceid" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Maintenance Date</label>
+                <input type="date" name="maintenancedate" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" rows="3" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Cost</label>
+                <input type="number" step="0.01" name="cost" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Next Due Date</label>
+                <input type="date" name="nextduedate" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Technician</label>
+                <select name="technicianid" required>
+                    {% for tech in technicians %}
+                    <option value="{{ tech.technicianid }}">Technician #{{ tech.technicianid }} - {{ tech.crewid.firstname }} {{ tech.crewid.lastname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Aircraft</label>
+                <select name="aircraftid" required>
+                    {% for ac in aircraft %}
+                    <option value="{{ ac.aircraftid }}">Aircraft #{{ ac.aircraftid }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Maintenance Type</label>
+                <select name="maintenancetypeid" required>
+                    {% for mt in maintenance_types %}
+                    <option value="{{ mt.maintenancetypeid }}">{{ mt.maintenancetype }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn">Add Maintenance Record</button>
+            <a href="{% url 'maintenance_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

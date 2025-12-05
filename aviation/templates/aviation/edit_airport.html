@@ -1,0 +1,61 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Edit Airport - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Edit Airport #{{ airport.airportcode }}</h1>
+        <p class="page-subtitle">Update airport information</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Airport Code</label>
+                <input type="number" name="airportcode" value="{{ airport.airportcode }}" readonly style="background-color: #374151; cursor: not-allowed;">
+            </div>
+            
+            <div class="form-group">
+                <label>Airport Name</label>
+                <input type="text" name="airportname" value="{{ airport.airportname }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Latitude</label>
+                <input type="number" step="0.000001" name="latitude" value="{{ airport.latitude }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Longitude</label>
+                <input type="number" step="0.000001" name="longitude" value="{{ airport.longitude }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Timezone</label>
+                <input type="text" name="timezone" value="{{ airport.timezone }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>City</label>
+                <select name="cityid" required>
+                    {% for city in cities %}
+                    <option value="{{ city.cityid }}" {% if airport.cityid.cityid == city.cityid %}selected{% endif %}>
+                        {{ city.cityname }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn">Update Airport</button>
+            <a href="{% url 'airports_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

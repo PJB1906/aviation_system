@@ -1,0 +1,83 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Edit Maintenance Record - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Edit Maintenance Record #{{ maintenance.maintenanceid }}</h1>
+        <p class="page-subtitle">Update maintenance record information</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Maintenance ID</label>
+                <input type="number" name="maintenanceid" value="{{ maintenance.maintenanceid }}" readonly style="background-color: #374151; cursor: not-allowed;">
+            </div>
+            
+            <div class="form-group">
+                <label>Maintenance Date</label>
+                <input type="date" name="maintenancedate" value="{{ maintenance.maintenancedate|date:'Y-m-d' }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" rows="3" required>{{ maintenance.description }}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Cost</label>
+                <input type="number" step="0.01" name="cost" value="{{ maintenance.cost }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Next Due Date</label>
+                <input type="date" name="nextduedate" value="{{ maintenance.nextduedate|date:'Y-m-d' }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Technician</label>
+                <select name="technicianid" required>
+                    {% for tech in technicians %}
+                    <option value="{{ tech.technicianid }}" {% if maintenance.technicianid.technicianid == tech.technicianid %}selected{% endif %}>
+                        Technician #{{ tech.technicianid }} - {{ tech.crewid.firstname }} {{ tech.crewid.lastname }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Aircraft</label>
+                <select name="aircraftid" required>
+                    {% for ac in aircraft %}
+                    <option value="{{ ac.aircraftid }}" {% if maintenance.aircraftid.aircraftid == ac.aircraftid %}selected{% endif %}>
+                        Aircraft #{{ ac.aircraftid }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Maintenance Type</label>
+                <select name="maintenancetypeid" required>
+                    {% for mt in maintenance_types %}
+                    <option value="{{ mt.maintenancetypeid }}" {% if maintenance.maintenancetypeid.maintenancetypeid == mt.maintenancetypeid %}selected{% endif %}>
+                        {{ mt.maintenancetype }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn">Update Maintenance Record</button>
+            <a href="{% url 'maintenance_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

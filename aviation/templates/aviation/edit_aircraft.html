@@ -1,0 +1,62 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Edit Aircraft - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Edit Aircraft #{{ aircraft.aircraftid }}</h1>
+        <p class="page-subtitle">Update aircraft information</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Aircraft ID</label>
+                <input type="number" name="aircraftid" value="{{ aircraft.aircraftid }}" readonly style="background-color: #374151; cursor: not-allowed;">
+            </div>
+            
+            <div class="form-group">
+                <label>Manufacture Year</label>
+                <input type="number" name="manufactureyear" value="{{ aircraft.manufactureyear }}" min="1900" max="2100" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Last Maintenance Date</label>
+                <input type="date" name="lastmaintenancedate" value="{{ aircraft.lastmaintenancedate|date:'Y-m-d' }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Airline</label>
+                <select name="airlineid" required>
+                    {% for airline in airlines %}
+                    <option value="{{ airline.airlineid }}" {% if aircraft.airlineid.airlineid == airline.airlineid %}selected{% endif %}>
+                        {{ airline.airlinename }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Aircraft Type</label>
+                <select name="aircrafttypecode" required>
+                    {% for type in aircraft_types %}
+                    <option value="{{ type.aircrafttypecode }}" {% if aircraft.aircrafttypecode.aircrafttypecode == type.aircrafttypecode %}selected{% endif %}>
+                        {{ type.typename }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn">Update Aircraft</button>
+            <a href="{% url 'aircraft_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

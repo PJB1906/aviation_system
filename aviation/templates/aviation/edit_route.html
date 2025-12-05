@@ -1,0 +1,70 @@
+{% extends 'aviation/base.html' %}
+
+{% block title %}Edit Route - AviationDB{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Edit Route #{{ route.routeid }}</h1>
+        <p class="page-subtitle">Update route information</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Route ID</label>
+                <input type="number" name="routeid" value="{{ route.routeid }}" readonly style="background-color: #374151; cursor: not-allowed;">
+            </div>
+            
+            <div class="form-group">
+                <label>Distance (KM)</label>
+                <input type="number" name="distancekm" value="{{ route.distancekm }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Estimated Duration (Minutes)</label>
+                <input type="number" name="estimateddurationmins" value="{{ route.estimateddurationmins }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Route Type</label>
+                <select name="routetype" required>
+                    <option value="0" {% if route.routetype == 0 %}selected{% endif %}>Domestic</option>
+                    <option value="1" {% if route.routetype == 1 %}selected{% endif %}>International</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Origin Airport</label>
+                <select name="originairportcode" required>
+                    {% for airport in airports %}
+                    <option value="{{ airport.airportcode }}" {% if route.originairportcode.airportcode == airport.airportcode %}selected{% endif %}>
+                        {{ airport.airportname }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Destination Airport</label>
+                <select name="destinationairportcode" required>
+                    {% for airport in airports %}
+                    <option value="{{ airport.airportcode }}" {% if route.destinationairportcode.airportcode == airport.airportcode %}selected{% endif %}>
+                        {{ airport.airportname }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn">Update Route</button>
+            <a href="{% url 'routes_list' %}" class="btn btn-secondary" style="margin-left: 1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
